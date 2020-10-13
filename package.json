@@ -1,0 +1,19 @@
+{
+  "name": "mymessanger",
+  "version": "1.0.0",
+  "description": "web messanger",
+  "main": "index.js",
+  "scripts": {
+    "dev": "concurrently \"cd server && npm run server\" \"cd client && npm start \""
+  },
+  "keywords": [
+    "messanger",
+    "nodejs",
+    "reactjs"
+  ],
+  "author": "Dr. Ivan A. <driga.ya27@gmail.com>",
+  "license": "ISC",
+  "dependencies": {
+    "concurrently": "^5.3.0"
+  }
+}
