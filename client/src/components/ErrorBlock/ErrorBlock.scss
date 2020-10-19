@@ -1,0 +1,19 @@
+.ErrorBlock{
+    position: absolute;
+    top: -50%;
+    left: 50%;
+    transform: translateX(-50%);
+    color: #fff;
+    background: rgba(0, 0, 0, .4);
+    padding: 15px;
+
+    transition: top .5s;
+
+    &.active{
+        top: 0;
+    }
+
+    i{
+        margin-right: 5px;
+    }
+}

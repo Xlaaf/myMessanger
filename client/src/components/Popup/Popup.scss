@@ -1,0 +1,41 @@
+.popup{
+    min-width: 120px;
+    background: #fff;
+    color: #000;
+    position: absolute;
+    margin-top: 15px;
+    right: 0;
+    display: none;
+
+    ul{
+        list-style-type: none;
+        li{
+            display: block;
+            padding: 5px 10px;
+            background: none;
+            margin: 5px 0;
+            &:hover{
+                text-decoration: underline;
+                background: rgba(0, 49, 83, .3);
+                cursor: pointer;
+            }
+        }
+    }
+
+    &.visible{
+        display: block;
+    }
+
+    &::after{
+        content: '';
+        display: block;
+        height: 10px;
+        width: 10px;
+        background: #fff;
+        position: absolute;
+        transform: rotate(45deg);
+        top: -5px;
+        right: 15px;
+        z-index: -100;
+    }
+}

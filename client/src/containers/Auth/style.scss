@@ -1,0 +1,99 @@
+.AuthForm{
+    display: flex;
+    flex-direction: column;
+    width: 300px;
+    margin: auto;
+    padding: 20px;
+    padding-top: 20vh;
+    color: #fff;
+    
+
+    h4{
+        font-size: 4vh;
+        margin: 0;
+        padding: 0;
+        margin-bottom: 20px;
+        font-weight: 300;
+        text-align: center;
+        letter-spacing: 3px;
+        opacity: .8;
+    }
+
+    &__input-cover{
+        position: relative;
+        display: flex;
+        flex-direction: column;
+    }
+
+    form{
+        display: flex;
+        flex-direction: column;
+        overflow: hidden;
+
+        input{
+            margin-top: 20px;
+            padding: 10px;
+            padding-left: 50px;
+            font-size: 20px;
+            background: none;
+            border: none;
+            border-bottom: 1px solid rgba(255, 255, 255, .6);
+            opacity: .8;
+            color: #fff;
+            &:focus{
+                outline: none;
+            }
+        }
+
+        label{
+            position: absolute;
+            top: 25px;
+            left: 10px;
+            font-size: 25px;
+            opacity: .8;
+        }
+
+        button{
+            margin-top: 30px;
+            font-size: 20px;
+            padding: 10px;
+            background: none;
+            border: 1px solid rgba(255, 255, 255, .6);
+            color: #fff;
+
+            &:hover{
+                cursor: pointer;
+            }
+            &:active, &:focus{
+                outline: none;
+            }
+        }
+
+        .errorMsg{
+            position: absolute;
+            font-size: 12px;
+            padding: 2px;
+            background: rgba(0, 0, 0, .3);
+
+            right: -100%;
+            bottom: 0;
+            transform: translateY(100%);
+            transition: right 1s;
+
+            i{
+                margin: 0 5px;
+            }
+
+            &.active{
+                right: 0;
+            }
+        }
+
+        a {
+            color: #fff;
+            font-size: 14px;
+            text-align: right;
+            margin-top: 20px;
+        }
+    }
+}

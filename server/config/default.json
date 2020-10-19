@@ -1,0 +1,5 @@
+{
+    "port": 5000,
+    "jwtSecret": "Dr. Ivan A. MESSANGER",
+    "mongoUri": "mongodb+srv://dr_ivan_a:123123123@cluster.pzmu1.mongodb.net/app?retryWrites=true&w=majority"
+} 
