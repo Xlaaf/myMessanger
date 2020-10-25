@@ -1,16 +1,59 @@
 .contacts {
+    display: block;
     width: 350px;
     height: 90vh;
     margin-right: 20px;
     background: rgba(0, 0, 0, 0.5);
     overflow: auto;
 
+    &__tabes {
+        position: relative;
+        background: rgba(255, 255, 255, 0.03);
+        display: flex;
+
+        span {
+            text-align: center;
+            display: block;
+            height: 100%;
+            width: 100%;
+            padding: 10px;
+            color: rgba(255, 255, 255, 0.5);
+            &.active {
+                color: #fff;
+            }
+
+            &:hover{
+                cursor: pointer;
+                background: rgba(255, 255, 255, 0.04);
+            }
+        }
+
+        &:after {
+            content: "";
+            background: #fff;
+            display: block;
+            height: 2px;
+            width: 50%;
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            transform: translateX(100%);
+            transition: all .5s;
+        }
+
+        &.active {
+            &:after {
+                transform: translateX(0);
+            }
+        }
+    }
+
     &:hover {
         &::-webkit-scrollbar-thumb {
             background: #77dde7;
         }
         &::-webkit-scrollbar-track {
-            background-color: rgba(255, 255, 255, .2);
+            background-color: rgba(255, 255, 255, 0.2);
         }
     }
 }
@@ -67,18 +110,13 @@
     }
 }
 
-@media (max-width: 800px){
-    .contacts{
+@media (max-width: 800px) {
+    .contacts {
         width: 100%;
         margin: 0 auto;
-        display: none;
+        // display: none;
     }
 }
-
-
-
-
-
 
 ::-webkit-scrollbar-button {
     // background-image: url("");

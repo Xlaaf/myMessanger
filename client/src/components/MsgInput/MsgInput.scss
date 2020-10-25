@@ -1,0 +1,44 @@
+.message__input {
+    background: rgba(33, 35, 87, 0.4);
+    display: flex;
+    padding: 10px;
+
+    textarea {
+        background: none;
+        padding: 10px;
+        border: none;
+        color: rgba(255, 255, 255, 0.6);
+        font-weight: 100;
+        width: 100%;
+        border-bottom: 1px solid #fff;
+        resize: none;
+        overflow: auto;
+
+        &:focus {
+            outline: none;
+        }
+    }
+
+    button {
+        // padding: 10px;
+        border: none;
+        // border: 1px solid #fff;
+        background: none;
+        color: rgba(119, 221, 231, 1);
+        font-weight: 500;
+        margin-left: 10px;
+
+        span {
+            font-size: 30px;
+        }
+
+        &:hover {
+            cursor: pointer;
+        }
+
+        &:active,
+        &:focus {
+            outline: none;
+        }
+    }
+}
