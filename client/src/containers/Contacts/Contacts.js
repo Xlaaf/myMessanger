@@ -34,7 +34,7 @@ export default function Contacts({ chooseContact }) {
 
     }, [request, jwtToken, tabStatus]);
 
-    // Обработка табов
+    // Обработка переключения табов
     const tabChange = (flag) => {
         setTabStatus(flag);
         setContacts([]);

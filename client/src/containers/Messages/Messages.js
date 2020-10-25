@@ -26,7 +26,6 @@ export default function Messages({ data }) {
         setBlockHeight(mainBlockRef.current);
     });
 
-
     // "props.data" to state "msgData"
     useEffect(() => {
         if (data) {
@@ -40,7 +39,6 @@ export default function Messages({ data }) {
 
     }, [data, joinRoom]);
 
-
     // on msgData change
     useEffect(() => {
         if (!msgData) return;
@@ -48,7 +46,6 @@ export default function Messages({ data }) {
         // прокрутка списка сообщений в самый низ
         messagesBlockRef.current.scrollTop = messagesBlockRef.current.scrollHeight;
     }, [msgData]);
-
 
     // On new message
     useEffect(() => {

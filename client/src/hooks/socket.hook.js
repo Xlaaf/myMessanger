@@ -14,12 +14,12 @@ export default function useSocket() {
 
     useEffect(() => {
         setSocket(io(window.location.hostname + ':5000'));
+        console.log('useSocket : useEffect');
     }, [jwtToken, request]);
 
     // on socket change
     useEffect(() => {
         if (!socket) return;
-
         socket.on('newMessage', (msg) => {
             setNewMessage(msg);
         });
