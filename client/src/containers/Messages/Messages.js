@@ -5,14 +5,13 @@ import './Messages.scss';
 import toggleBlocks from '../../functions/toggleMessages';
 import setBlockHeight from '../../functions/setBlockHeight';
 import { useHttp } from './../../hooks/http.hook';
-import useSocket from './../../hooks/socket.hook';
 import Message from './Message';
 import MsgInput from '../../components/MsgInput/MsgInput';
 
 
-export default function Messages({ data }) {
+export default function Messages({ data, socket }) {
     const { request } = useHttp();
-    const { newMessage, isOnline, sendMsg, joinRoom } = useSocket();
+    const { newMessage, status, sendMsg, initContact } = socket;
     const [jwtToken] = useState(useSelector(state => state.auth.jwtToken));
 
     const [msgData, setMsgData] = useState(null);
@@ -21,25 +20,23 @@ export default function Messages({ data }) {
     const messagesBlockRef = useRef();
 
 
-    // Compute block's height (for mobile-layout)
+    // Установка высоты блока <Messages /> по высоте экрана
     useEffect(() => {
         setBlockHeight(mainBlockRef.current);
     });
 
-    // "props.data" to state "msgData"
+    // Инициализация данных
     useEffect(() => {
         if (data) {
-            setMsgData(data);
-            joinRoom({
-                roomId: data.roomId,
-                userId: data.firstUser._id,
-                secondUserId: data.secondUser._id
-            });
+            setMsgData(data); // Перевод props.data в состояние msgData
+            
+            // Вызвать событие сокета на добавление в коллекцию "контактов" нового пользователя (back-end)
+            initContact({ userId: data.secondUser._id }); 
         }
 
-    }, [data, joinRoom]);
+    }, [data, initContact]);
 
-    // on msgData change
+    // Обработка изменения состояния msgData (например: добавление нового сообщения)
     useEffect(() => {
         if (!msgData) return;
 
@@ -47,12 +44,14 @@ export default function Messages({ data }) {
         messagesBlockRef.current.scrollTop = messagesBlockRef.current.scrollHeight;
     }, [msgData]);
 
-    // On new message
+    // Обработка получения нового сообщения
     useEffect(() => {
         if (!newMessage) return;
 
         setMsgData(prev => ({
             ...prev,
+
+            //  Добавление в массив сообщений нового сообщения
             messages: [newMessage, ...prev.messages]
         }));
 
@@ -89,20 +88,27 @@ export default function Messages({ data }) {
     const sendMessage = async (messageText) => {
         const newMessage = createMessage(messageText);
 
+        // Если массив сообщений есть (тоесть уже есть определнная история переписки между пользователями)
         if (msgData.messages) {
             setMsgData(prev => ({
                 ...prev,
+
+                // Добавление нового сообщения в начало массива сообщений
                 messages: [newMessage, ...prev.messages]
             }));
         } else {
             setMsgData(prev => ({
                 ...prev,
+
+                // Создание массива сообщений и доавление в него первого сообщения
                 messages: [newMessage]
             }));
         }
 
-        sendMsg(newMessage);
+        // Отправка сообщения по сокету (сообщение: message, пользователь: userId)
+        sendMsg({ message: newMessage, userId: msgData.secondUser._id });
 
+        // Добавление нового сообщения в БД
         await request(`/api/chat/${jwtToken}/sendmessage`, 'POST', {
             message: messageText,
             secondUserId: msgData.secondUser._id
@@ -118,8 +124,8 @@ export default function Messages({ data }) {
                         <div className='messages__title'>
                             <i className="fa fa-chevron-left" aria-hidden="true" onClick={toggleBlocks} />
                             <div className="messages__title__flex-wrapper">
-                                <span className='messages__title__name'>{data.secondUser.name}</span>
-                                <span className='messages__title__status'>{isOnline ? 'Онлайн' : 'Оффлайн'}</span>
+                                <span className='messages__title__name'>{msgData.secondUser.name}</span>
+                                <span className='messages__title__status'>{status[msgData.secondUser._id] ? 'Онлайн' : 'Оффлайн'}</span>
                             </div>
                         </div>
 

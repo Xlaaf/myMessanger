@@ -5,7 +5,7 @@ import './Contacts.scss';
 import { useHttp } from './../../hooks/http.hook';
 import Contact from './Contact';
 
-export default function Contacts({ chooseContact }) {
+export default function Contacts({ chooseContact, socket }) {
     const { request } = useHttp();
     const [jwtToken] = useState(useSelector(state => state.auth.jwtToken));
     const [tabStatus, setTabStatus] = useState(true);
@@ -15,16 +15,12 @@ export default function Contacts({ chooseContact }) {
     // Получение списка переписок и пользователей с которыми они ведуться
     useEffect(() => {
         const getUsers = async () => {
-            console.log('getUsers()');
             const res = await request(`/api/database/${jwtToken}/contacts`, 'GET');
-            console.log(res);
             setContacts(res.contacts);
         }
 
         const getAllUsers = async () => {
-            console.log('getAllUsers()');
             const res = await request(`/api/database/${jwtToken}/users`, 'GET');
-            console.log(res);
             setContacts(res.users);
         }
 
@@ -44,8 +40,8 @@ export default function Contacts({ chooseContact }) {
     return (
         <div className='contacts'>
             <div className={`contacts__tabes ${tabStatus ? 'active' : ''}`}>
-                <span className={tabStatus ? 'active' : ''} onClick={()=>tabChange(true)}>Мои конакты</span>
-                <span className={!tabStatus ? 'active' : ''} onClick={()=>tabChange(false)}>Все</span>
+                <span className={tabStatus ? 'active' : ''} onClick={() => tabChange(true)}>Мои конакты</span>
+                <span className={!tabStatus ? 'active' : ''} onClick={() => tabChange(false)}>Все</span>
             </div>
             {
                 tabStatus
