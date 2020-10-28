@@ -29,9 +29,9 @@ export default function Messages({ data, socket }) {
     useEffect(() => {
         if (data) {
             setMsgData(data); // Перевод props.data в состояние msgData
-            
+
             // Вызвать событие сокета на добавление в коллекцию "контактов" нового пользователя (back-end)
-            initContact({ userId: data.secondUser._id }); 
+            initContact({ userId: data.secondUser._id });
         }
 
     }, [data, initContact]);
@@ -47,6 +47,8 @@ export default function Messages({ data, socket }) {
     // Обработка получения нового сообщения
     useEffect(() => {
         if (!newMessage) return;
+        if (!msgData) return;
+        if (msgData.secondUser._id !== newMessage.userId) return;
 
         setMsgData(prev => ({
             ...prev,
@@ -54,7 +56,8 @@ export default function Messages({ data, socket }) {
             //  Добавление в массив сообщений нового сообщения
             messages: [newMessage, ...prev.messages]
         }));
-
+        
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [newMessage]);
 
     // Создание блоков <Message /> по данным из "msgData"

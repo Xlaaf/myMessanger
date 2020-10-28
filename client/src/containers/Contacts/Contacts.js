@@ -7,6 +7,7 @@ import Contact from './Contact';
 
 export default function Contacts({ chooseContact, socket }) {
     const { request } = useHttp();
+    const { status, initContact, newMessage } = socket;
     const [jwtToken] = useState(useSelector(state => state.auth.jwtToken));
     const [tabStatus, setTabStatus] = useState(true);
     const [contacts, setContacts] = useState([]);
@@ -16,24 +17,43 @@ export default function Contacts({ chooseContact, socket }) {
     useEffect(() => {
         const getUsers = async () => {
             const res = await request(`/api/database/${jwtToken}/contacts`, 'GET');
+
+            // Добавление пользователя в список "контактов" сокета (для рассылки изменений данных пользователя)
+            res.contacts.forEach(c => initContact({ userId: c.contact._id }));
             setContacts(res.contacts);
         }
 
         const getAllUsers = async () => {
             const res = await request(`/api/database/${jwtToken}/users`, 'GET');
-            setContacts(res.users);
+            const users = res.users;
+
+            setContacts(users);
         }
 
         tabStatus
             ? getUsers()
             : getAllUsers();
 
-    }, [request, jwtToken, tabStatus]);
+    }, [request, jwtToken, tabStatus, initContact]);
 
     // Обработка переключения табов
     const tabChange = (flag) => {
         setTabStatus(flag);
         setContacts([]);
+    }
+
+    // Форматирование текста последнего сообщения (если текст слишком длинный, обрезать и добавить "...")
+    const lastMessageFormat = (message) => {
+        return message.length < 30
+            ? message
+            : message.split('').slice(0, 30).join('') + '...';
+    }
+
+    // Обработка получения нового сообщения
+    const setNewMessage = (userId) => {
+        if (!newMessage) return null;
+        if (userId !== newMessage.userId) return null;
+        return lastMessageFormat(newMessage.text);
     }
 
 
@@ -50,13 +70,17 @@ export default function Contacts({ chooseContact, socket }) {
                         img={c.contact.photo}
                         name={c.contact.name}
                         time={new Date(c.lastMessage.time).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
-                        lastMessage={c.lastMessage.text.split('').slice(0, 30).join('') + '...'}
+                        lastMessage={lastMessageFormat(c.lastMessage.text)}
+                        newMessage={setNewMessage(c.contact._id)}
+                        isOnline={status[c.contact._id]}
+
                         onClick={() => chooseContact(c.contact._id)}
                     />)
                     : contacts.map(c => <Contact
                         key={c._id}
                         img={c.photo}
                         name={c.name}
+
                         onClick={() => chooseContact(c._id)}
                     />)
             }

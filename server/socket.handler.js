@@ -24,6 +24,7 @@ module.exports = socket => {
 
     // Событие на добавление нового контакта в коллекцию "контактов"
     socket.on('initContact', data => {
+        console.log('INIT: ', data);
         // data.userId - id пользователя, чей контакт добавляем в "список контактов" нашего пользователя
         socket.to(data.userId).emit('update-status', {userId: socket.userId, isOnline: true});
         socket.contacts.add(data.userId); // добавление конакта в коллекцию

@@ -1,18 +1,20 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { useSelector } from 'react-redux';
 
 import toggleBlocks from '../functions/toggleMessages';
 import { useHttp } from './../hooks/http.hook';
+import useSocket from './../hooks/socket.hook';
+
 import Navbar from '../containers/Navbar/Navbar';
 import FlexWrapper from './../hoc/FlexWrapper';
-import Contacts from '../containers/Contacts/Contacts';
 import Messages from './../containers/Messages/Messages';
-import useSocket from './../hooks/socket.hook';
+import Contacts from '../containers/Contacts/Contacts';
+import VideoChat from '../containers/VideoChat/VideoChat';
 
 
 export default function Home() {
     const { request } = useHttp();
-    const socket = useSocket();    
+    const socket = useSocket();
     const [jwtToken] = useState(useSelector(state => state.auth.jwtToken));
     const [userId] = useState(useSelector(state => state.auth.userId));
 
@@ -20,10 +22,10 @@ export default function Home() {
     const [messagesData, setMessagesData] = useState(null);
 
     // Инициализция пользователя по сокету
-    useEffect(() => {
-        if(!socket) return;
+    useEffect(useCallback(() => {
+        if (!socket) return;
         socket.initialUser({ userId });
-    }, [socket, userId]);
+    }, [userId, socket]));
 
     // Получить данные о переписке
     const getMessages = async (scndUserId) => {
@@ -42,6 +44,7 @@ export default function Home() {
                 <Contacts chooseContact={getMessages} socket={socket} />
                 <Messages data={messagesData} socket={socket} />
             </FlexWrapper>
+            <VideoChat />
         </div>
     )
 }

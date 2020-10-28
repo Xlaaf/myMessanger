@@ -9,13 +9,17 @@ export default function useSocket() {
     const [jwtToken] = useState(useSelector(state => state.auth.jwtToken));
     const [userId] = useState(useSelector(state => state.auth.userId));
     const [socket, setSocket] = useState(null);
+
+    // Каждое новое сообщения помещается в переменную, замещая старое (и сразу же обрабатывается в компонентах)
     const [newMessage, setNewMessage] = useState(null);
+    
+    // Объект онлайн статусов пользователей (ключ - userId : значение - true/false)
     const [status, setStatus] = useState({});
 
 
     // Определение сокета
     useEffect(() => {
-        setSocket(io(window.location.hostname + ':5000'));
+        setSocket(io('http://' + window.location.hostname + ':5000'));
     }, [jwtToken, request]);
 
     // Добавление событий
@@ -41,7 +45,7 @@ export default function useSocket() {
     }, [socket, userId]);
 
 
-    // Вызов события "connect"
+    // Вызов события "initialUser"
     const initialUser = useCallback((data) => {
         if (!socket) return;
         socket.emit('initialUser', data);
