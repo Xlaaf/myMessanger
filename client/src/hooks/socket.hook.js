@@ -1,7 +1,6 @@
 import { useState, useCallback, useEffect } from 'react';
 import { useSelector } from 'react-redux';
 import io from 'socket.io-client';
-
 import { useHttp } from './http.hook';
 
 export default function useSocket() {
@@ -12,14 +11,14 @@ export default function useSocket() {
 
     // Каждое новое сообщения помещается в переменную, замещая старое (и сразу же обрабатывается в компонентах)
     const [newMessage, setNewMessage] = useState(null);
-    
+
     // Объект онлайн статусов пользователей (ключ - userId : значение - true/false)
     const [status, setStatus] = useState({});
 
 
     // Определение сокета
     useEffect(() => {
-        setSocket(io('http://' + window.location.hostname + ':5000'));
+        setSocket(io(window.location.hostname + ':5000'));
     }, [jwtToken, request]);
 
     // Добавление событий
@@ -66,7 +65,7 @@ export default function useSocket() {
             }));
         }
         getStatus();
-        
+
     }, [socket, jwtToken, request]);
 
     // Вызов события "message"

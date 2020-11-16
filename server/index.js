@@ -2,8 +2,11 @@ const config = require('config');
 const mongoose = require('mongoose');
 const express = require('express');
 const app = express();
+
 const server = require('http').createServer(app);
+
 const io = require('socket.io')(server);
+
 
 const { checkJwt } = require('./middlewares/middlewares');
 

@@ -9,9 +9,9 @@ module.exports = socket => {
 
 
     // Событие инициализации пользователя
-    socket.on('initialUser', async data =>{
+    socket.on('initialUser', async data => {
         socket.userId = data.userId;
-        
+
         // Создать комнату по id пользователя
         socket.join(data.userId);
 
@@ -26,7 +26,7 @@ module.exports = socket => {
     socket.on('initContact', data => {
         console.log('INIT: ', data);
         // data.userId - id пользователя, чей контакт добавляем в "список контактов" нашего пользователя
-        socket.to(data.userId).emit('update-status', {userId: socket.userId, isOnline: true});
+        socket.to(data.userId).emit('update-status', { userId: socket.userId, isOnline: true });
         socket.contacts.add(data.userId); // добавление конакта в коллекцию
     });
 
@@ -46,8 +46,9 @@ module.exports = socket => {
 
         // Отправка рассылки пользователям из коллекции "контактов" о выходе пользователя из "онлайн"
         socket.contacts.forEach((userId) => {
-            socket.to(userId).emit('update-status', {userId: socket.userId, isOnline: false})
+            socket.to(userId).emit('update-status', { userId: socket.userId, isOnline: false })
         });
+
 
         // Изменение онлайн статуса в БД в значение false
         await User.findOneAndUpdate(

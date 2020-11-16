@@ -9,7 +9,6 @@ import Navbar from '../containers/Navbar/Navbar';
 import FlexWrapper from './../hoc/FlexWrapper';
 import Messages from './../containers/Messages/Messages';
 import Contacts from '../containers/Contacts/Contacts';
-import VideoChat from '../containers/VideoChat/VideoChat';
 
 
 export default function Home() {
@@ -44,7 +43,6 @@ export default function Home() {
                 <Contacts chooseContact={getMessages} socket={socket} />
                 <Messages data={messagesData} socket={socket} />
             </FlexWrapper>
-            <VideoChat />
         </div>
     )
 }
