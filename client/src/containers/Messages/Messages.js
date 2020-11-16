@@ -5,11 +5,13 @@ import './Messages.scss';
 import toggleBlocks from '../../functions/toggleMessages';
 import setBlockHeight from '../../functions/setBlockHeight';
 import { useHttp } from './../../hooks/http.hook';
+
 import Message from './Message';
 import MsgInput from '../../components/MsgInput/MsgInput';
+import Loader from './../../components/Loader/Loader';
 
 
-export default function Messages({ data, socket }) {
+export default function Messages({ data, loading, socket }) {
     const { request } = useHttp();
     const { newMessage, status, sendMsg, initContact } = socket;
     const [jwtToken] = useState(useSelector(state => state.auth.jwtToken));
@@ -38,7 +40,7 @@ export default function Messages({ data, socket }) {
 
     // Обработка изменения состояния msgData (например: добавление нового сообщения)
     useEffect(() => {
-        if (!msgData) return;
+        if (!msgData || loading) return;
 
         // прокрутка списка сообщений в самый низ
         messagesBlockRef.current.scrollTop = messagesBlockRef.current.scrollHeight;
@@ -56,7 +58,7 @@ export default function Messages({ data, socket }) {
             //  Добавление в массив сообщений нового сообщения
             messages: [newMessage, ...prev.messages]
         }));
-        
+
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [newMessage]);
 
@@ -122,25 +124,27 @@ export default function Messages({ data, socket }) {
     return (
         <div className='messages' ref={mainBlockRef}>
             {
-                msgData ?
-                    <>
-                        <div className='messages__title'>
-                            <i className="fa fa-chevron-left" aria-hidden="true" onClick={toggleBlocks} />
-                            <div className="messages__title__flex-wrapper">
-                                <span className='messages__title__name'>{msgData.secondUser.name}</span>
-                                <span className='messages__title__status'>{status[msgData.secondUser._id] ? 'Онлайн' : 'Оффлайн'}</span>
+                loading ?
+                    <Loader />
+                    : msgData ?
+                        <>
+                            <div className='messages__title'>
+                                <i className="fa fa-chevron-left" aria-hidden="true" onClick={toggleBlocks} />
+                                <div className="messages__title__flex-wrapper">
+                                    <span className='messages__title__name'>{msgData.secondUser.name}</span>
+                                    <span className='messages__title__status'>{status[msgData.secondUser._id] ? 'Онлайн' : 'Оффлайн'}</span>
+                                </div>
                             </div>
-                        </div>
 
-                        <div className='messages__body' ref={messagesBlockRef}>
-                            {
-                                msgData.messages ? createMessagesFromData() : null
-                            }
-                        </div>
+                            <div className='messages__body' ref={messagesBlockRef}>
+                                {
+                                    msgData.messages ? createMessagesFromData() : null
+                                }
+                            </div>
 
-                        <MsgInput submitFunc={sendMessage} onBlur={() => setTimeout(() => setBlockHeight(mainBlockRef.current), 200)} />
-                    </>
-                    : <span className='empty'>Выберите кому хотите написать</span>
+                            <MsgInput submitFunc={sendMessage} onBlur={() => setTimeout(() => setBlockHeight(mainBlockRef.current), 200)} />
+                        </>
+                        : <span className='empty'>Выберите кому хотите написать</span>
             }
         </div>
     );

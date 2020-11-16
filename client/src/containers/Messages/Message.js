@@ -11,7 +11,7 @@ export default function Message({ own, img, text, time }) {
             <div className='message__content'>
                 {
                     text.split('\n').map(text => (
-                        <React.Fragment key={`${text}:${time}`}>
+                        <React.Fragment key={`${text}:${time}:${Math.random()}`}>
                             {text}
                             <br />
                         </React.Fragment>

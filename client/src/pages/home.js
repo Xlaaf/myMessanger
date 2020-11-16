@@ -20,6 +20,9 @@ export default function Home() {
     // Данные о переписке (для отображения компонента <Messages />)
     const [messagesData, setMessagesData] = useState(null);
 
+    // Состояние, оповещающее о процессе ожидания новых данных "loading"
+    const [loading, setLoading] = useState(false);
+
     // Инициализция пользователя по сокету
     useEffect(useCallback(() => {
         if (!socket) return;
@@ -31,8 +34,10 @@ export default function Home() {
         // Переключить компонент <Contacs /> на <Messages /> в мобильной верстке
         toggleBlocks();
 
+        setLoading(true);
         const res = await request(`/api/database/${jwtToken}/messages/${scndUserId}`, 'GET');
         setMessagesData(res);
+        setLoading(false);
     }
 
 
@@ -41,7 +46,7 @@ export default function Home() {
             <Navbar />
             <FlexWrapper>
                 <Contacts chooseContact={getMessages} socket={socket} />
-                <Messages data={messagesData} socket={socket} />
+                <Messages data={messagesData} loading={loading} socket={socket} />
             </FlexWrapper>
         </div>
     )
