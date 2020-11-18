@@ -44,7 +44,7 @@ export default function Messages({ data, loading, socket }) {
 
         // прокрутка списка сообщений в самый низ
         messagesBlockRef.current.scrollTop = messagesBlockRef.current.scrollHeight;
-    }, [msgData]);
+    }, [msgData, loading]);
 
     // Обработка получения нового сообщения
     useEffect(() => {

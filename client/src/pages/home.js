@@ -35,7 +35,10 @@ export default function Home() {
         toggleBlocks();
 
         setLoading(true);
+        
         const res = await request(`/api/database/${jwtToken}/messages/${scndUserId}`, 'GET');
+        if(res.jwtError) return;
+
         setMessagesData(res);
         setLoading(false);
     }

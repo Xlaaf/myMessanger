@@ -21,6 +21,7 @@ export default function ProfileSettings(props) {
     useEffect(() => {
         const getUserInfo = async () => {
             const res = await request(`/api/database/${userInfo.jwtToken}/userInfo`, 'GET');
+            if(res.jwtError) return;
 
             setUserInfo(prev => ({
                 ...prev,

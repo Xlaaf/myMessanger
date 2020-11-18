@@ -33,6 +33,11 @@ export default function Navbar() {
         const getUserInfo = async () => {
             const response = await request(`/api/database/${userInfo.jwtToken}/userInfo`, 'GET');
 
+            
+            if(response.jwtError){
+                return;
+            }
+
             setUserInfo(prev => ({
                 ...prev,
                 name: response.name,

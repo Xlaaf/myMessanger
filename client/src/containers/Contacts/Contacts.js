@@ -16,7 +16,9 @@ export default function Contacts({ chooseContact, socket }) {
     // Получение списка переписок и пользователей с которыми они ведуться
     useEffect(() => {
         const getUsers = async () => {
+            console.log('getUsers()');
             const res = await request(`/api/database/${jwtToken}/contacts`, 'GET');
+            if(res.jwtError) return;
 
             // Добавление пользователя в список "контактов" сокета (для рассылки изменений данных пользователя)
             res.contacts.forEach(c => initContact({ userId: c.contact._id }));
@@ -24,7 +26,10 @@ export default function Contacts({ chooseContact, socket }) {
         }
 
         const getAllUsers = async () => {
+            console.log('getAllUsers()');
             const res = await request(`/api/database/${jwtToken}/users`, 'GET');
+            if(res.jwtError) return;
+
             const users = res.users;
 
             setContacts(users);
