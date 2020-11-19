@@ -16,21 +16,25 @@ export default function Contacts({ chooseContact, socket }) {
     // Получение списка переписок и пользователей с которыми они ведуться
     useEffect(() => {
         const getUsers = async () => {
-            console.log('getUsers()');
             const res = await request(`/api/database/${jwtToken}/contacts`, 'GET');
             if(res.jwtError) return;
 
             // Добавление пользователя в список "контактов" сокета (для рассылки изменений данных пользователя)
             res.contacts.forEach(c => initContact({ userId: c.contact._id }));
-            setContacts(res.contacts);
+
+            // Сортировка сообщений по дате последнего сообщения
+            res.contacts.sort((a, b) => new Date(a.lastMessage.time) - new Date(b.lastMessage.time));
+
+            setContacts(res.contacts.reverse());
         }
 
         const getAllUsers = async () => {
-            console.log('getAllUsers()');
             const res = await request(`/api/database/${jwtToken}/users`, 'GET');
             if(res.jwtError) return;
 
             const users = res.users;
+
+            console.log('users (ALL): ', users);
 
             setContacts(users);
         }
@@ -39,7 +43,7 @@ export default function Contacts({ chooseContact, socket }) {
             ? getUsers()
             : getAllUsers();
 
-    }, [request, jwtToken, tabStatus, initContact]);
+    }, [request, jwtToken, tabStatus, initContact, newMessage]);
 
     // Обработка переключения табов
     const tabChange = (flag) => {
