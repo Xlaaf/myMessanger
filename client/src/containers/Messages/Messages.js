@@ -56,7 +56,7 @@ export default function Messages({ data, loading, socket }) {
             ...prev,
 
             //  Добавление в массив сообщений нового сообщения
-            messages: [newMessage, ...prev.messages]
+            messages: [newMessage, ...prev.messages || []]
         }));
 
         // eslint-disable-next-line react-hooks/exhaustive-deps
