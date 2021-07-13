@@ -47,7 +47,7 @@ router.post('/sendmessage', async (req, res) => {
             )
         }
 
-        res.json({ message: 'Сообщение успешно отправлено', newMessage: {messageItem, _id: Math.random()} });
+        res.json({ message: 'Pesan berhasil dikirim', newMessage: {messageItem, _id: Math.random()} });
 
     } catch (e) {
         res.status(500).json({ message: e.message });
