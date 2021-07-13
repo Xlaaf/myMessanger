@@ -13,9 +13,9 @@ router.post(
     '/register',
     // Middleware для валидации данных, пришедших от html-формы
     [
-        check('email', 'Некорректный email').isEmail(), // Проверка e-mail на корректность
-        check('password', 'Минимальная длина пароля 6 символов').isLength({ min: 6 }), // Проверка пароля на корректность
-        check('name', 'Не корректные данные в поле "Имя"').isLength({ min: 2, max: 50 }) // Проверка имени на корректность
+        check('email', 'Email Salah').isEmail(), // Проверка e-mail на корректность
+        check('password', 'Panjang kata sandi minimal 6 karakter').isLength({ min: 6 }), // Проверка пароля на корректность
+        check('name', 'Data tidak valid di "Nama"').isLength({ min: 2, max: 50 }) // Проверка имени на корректность
     ],
     async (req, res) => {
         try {
@@ -26,7 +26,7 @@ router.post(
             if (!errors.isEmpty()) {
                 return res.status(400).json({
                     errors: errors.array(),
-                    message: "Некорректные регистрационные данные"
+                    message: "Data pendaftaran salah"
                 });
             }
 
@@ -37,7 +37,7 @@ router.post(
             // Если пользователь найден, вернуть сообщение об ошибке (регистрация не состоялась)
             const candidate = await User.findOne({ email });
             if (candidate) {
-                return res.status(400).json({ message: 'Пользователь с таким email адресом уже существует' });
+                return res.status(400).json({ message: 'Pengguna dengan alamat email ini sudah ada' });
             }
 
             // Если польозватель с указанной почтой не найден, идем дальше.
@@ -54,12 +54,12 @@ router.post(
             await user.save();
 
             // Вернуть сообщение об успешной регестрации
-            res.status(201).json({ message: 'Пользователь успешно зарегистрирован' });
+            res.status(201).json({ message: 'Pengguna berhasil terdaftar' });
 
         } catch (e) {
 
             // Вернуть сообщение об ошибке в процессе регестрации
-            res.status(500).json({ message: 'Что-то пошло не так. Попробуйте снова' })
+            res.status(500).json({ message: 'Ada yang salah. Cobalah lagi' })
         }
     }
 )
@@ -69,8 +69,8 @@ router.post(
     '/login',
     // Middlewarre для валидации данных из html-формы
     [
-        check('email', 'Некорректный email').isEmail(),
-        check('password', 'Минимальная длина пароля 6 символов').exists()
+        check('email', 'Email Salah').isEmail(),
+        check('password', 'Panjang kata sandi minimal 6 karakter').exists()
     ],
     async (req, res) => {
         try {
@@ -81,7 +81,7 @@ router.post(
             if (!errors.isEmpty()) {
                 return res.status(400).json({
                     errors: errors.array(),
-                    message: "Некорректные данные при входе в систему"
+                    message: "Data masuk salah"
                 });
             }
 
@@ -92,7 +92,7 @@ router.post(
             // Если пользователь с такой почтой не найден, вернуть сообщение об ошибке
             const user = await User.findOne({ email });
             if (!user) {
-                return res.status(400).json({ message: 'Пользователь с таким email адресом не существует' });
+                return res.status(400).json({ message: 'Pengguna dengan alamat email ini tidak ada' });
             }
 
             // Сравнение указанного пароля с паролем полученным из БД
@@ -117,7 +117,7 @@ router.post(
         } catch (e) {
 
             // Вернуть сообщение об ошибке
-            res.status(500).json({ message: 'Что-то пошло не так. Попробуйте снова' })
+            res.status(500).json({ message: 'Ada yang salah. Coba lagi' })
         }
     }
 );
