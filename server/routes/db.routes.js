@@ -11,7 +11,7 @@ router.get('/userInfo', async (req, res) => {
 
         const user = await User.findOne({ _id: userId });
         if (!user) {
-            return res.status(400).json({ message: 'Пользователь с таким id не найден' });
+            return res.status(400).json({ message: 'Pengguna dengan id ini tidak ditemukan' });
         }
 
         res.json({ name: user.name, photo: user.photo, isOnline: user.isOnline });
@@ -33,7 +33,7 @@ router.post('/userInfo', async (req, res) => {
 
         user.save();
 
-        res.json({ message: 'Данные успешно обновлены' });
+        res.json({ message: 'Data berhasil diperbarui' });
 
     } catch (e) {
         res.status(500).json({ message: e.message });
@@ -74,7 +74,7 @@ router.get('/users', async (req, res) => {
     try {
         const users = await User.find({ _id: { $ne: req.body.jwtDecoded.userId } }, 'photo name isOnline');
         if (!users) {
-            throw new Error('Ошибка! Не удалось найти пользователей кроме вас!');
+            throw new Error('Kesalahan! Tidak dapat menemukan pengguna selain Anda!');
         }
 
         res.json({ users });
@@ -101,12 +101,12 @@ router.get('/messages/:scndUserId', async (req, res) => {
 
         // Если не получилось найти второго пользователя
         if (!secondUser) {
-            throw new Error('Пользователь, с которым ведется переписка, не найден!');
+            throw new Error('Pengguna yang mengobrol dengan Anda tidak ditemukan!');
         }
 
         // Если не получилось найти первого пользователя
         if (!firstUser) {
-            throw new Error('Пользователь не найден!');
+            throw new Error('Pengguna tidak ditemukan!');
         }
 
         // Если не удалось переиски между данными пользователям
@@ -134,7 +134,7 @@ router.get('/:userId/status', async (req, res) => {
 
         const user = await User.findOne({ _id: userId });
         if (!user) {
-            throw new Error('Пользователь с таким id не найден!');
+            throw new Error('Pengguna dengan id ini tidak ditemukan!');
         }
 
         res.json({ isOnline: user.isOnline });
